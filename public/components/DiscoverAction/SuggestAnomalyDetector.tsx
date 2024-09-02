@@ -61,7 +61,7 @@ import { formikToDetector } from '../../pages/ReviewAndCreate/utils/helpers';
 import { FormattedFormRow } from '../FormattedFormRow/FormattedFormRow';
 import { FeatureAccordion } from '../../pages/ConfigureModel/components/FeatureAccordion';
 import { AD_DOCS_LINK, DEFAULT_SHINGLE_SIZE, MAX_FEATURE_NUM, PLUGIN_NAME } from '../../utils/constants';
-import { getNotifications } from '../../services';
+import { getNotifications, getQueryService } from '../../services';
 import { prettifyErrorMessage } from '../../../server/utils/helpers';
 import EnhancedAccordion from '../FeatureAnywhereContextMenu/EnhancedAccordion';
 import MinimalAccordion from '../FeatureAnywhereContextMenu/MinimalAccordion';
@@ -69,7 +69,6 @@ import { DataFilterList } from '../../pages/DefineDetector/components/DataFilter
 import { generateParameters } from '../../redux/reducers/assistant';
 import { FEATURE_TYPE } from '../../models/interfaces';
 import { FeaturesFormikValues } from '../../pages/ConfigureModel/models/interfaces';
-import { DiscoverActionContext } from '../../../../../src/plugins/data_explorer/public/types';
 import { getMappings } from '../../redux/reducers/opensearch';
 import { mountReactNode } from '../../../../../src/core/public/utils';
 import { formikToDetectorName } from '../FeatureAnywhereContextMenu/CreateAnomalyDetector/helpers';
@@ -80,17 +79,17 @@ export interface GeneratedParameters {
     dateFields: string[];
 }
 
-function GenerateAnomalyDetector({
+function SuggestAnomalyDetector({
     closeFlyout,
-    context,
 }: {
     closeFlyout: any;
-    context: DiscoverActionContext;
 }) {
+    const query = getQueryService();
+    console.log(query.state$);
     const dispatch = useDispatch();
     const notifications = getNotifications();
-    const indexPatternId = context.indexPattern?.id;
-    const indexPatternName = context.indexPattern?.title;
+    const indexPatternId = query.state$.query.dataset.id;
+    const indexPatternName = query.state$.query.dataset.title;
     if (!indexPatternId || !indexPatternName) {
         notifications.toasts.addDanger(
             'Cannot extract index pattern from the context'
@@ -857,4 +856,4 @@ function GenerateAnomalyDetector({
     );
 }
 
-export default GenerateAnomalyDetector;
+export default SuggestAnomalyDetector;

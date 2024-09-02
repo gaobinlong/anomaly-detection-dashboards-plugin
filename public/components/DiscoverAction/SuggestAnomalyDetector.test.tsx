@@ -16,7 +16,7 @@ import {
 import { Provider } from 'react-redux';
 
 import configureStore from '../../redux/configureStore';
-import GenerateAnomalyDetector from './SuggestAnomalyDetector';
+import SuggestAnomalyDetector from './SuggestAnomalyDetector';
 import { DiscoverActionContext } from '../../../../../src/plugins/data_explorer/public';
 import { fieldFormatsMock } from '../../../../../src/plugins/data/common/field_formats/mocks';
 import { IndexPattern } from '../../../../../src/plugins/data/common';
@@ -48,7 +48,7 @@ const renderWithRouter = (context: DiscoverActionContext) => ({
                     <Route
                         render={(props: RouteComponentProps) => (
                             <CoreServicesContext.Provider value={coreServicesMock}>
-                                <GenerateAnomalyDetector
+                                <SuggestAnomalyDetector
                                     context={context}
                                     closeFlyout={jest.fn()}
                                 />

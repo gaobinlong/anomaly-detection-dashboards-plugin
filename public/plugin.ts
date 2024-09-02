@@ -27,7 +27,7 @@ import {
 } from '../../../src/plugins/embeddable/public';
 import { ACTION_AD } from './action/ad_dashboard_action';
 import { APP_PATH, DASHBOARD_PAGE_NAV_ID, DETECTORS_PAGE_NAV_ID, OVERVIEW_PAGE_NAV_ID, PLUGIN_NAME } from './utils/constants';
-import { getActions } from './utils/contextMenu/getActions';
+import { ACTION_SUGGEST_AD, getActions, getSuggestAnomalyDetectorAction } from './utils/contextMenu/getActions';
 import { overlayAnomaliesFunction } from './expressions/overlay_anomalies';
 import {
   setClient,
@@ -50,16 +50,16 @@ import {
   VisAugmenterStart,
 } from '../../../src/plugins/vis_augmenter/public';
 import { UiActionsStart } from '../../../src/plugins/ui_actions/public';
-import { DataPublicPluginStart } from '../../../src/plugins/data/public';
+import { DataPublicPluginSetup, DataPublicPluginStart } from '../../../src/plugins/data/public';
 import { DataSourceManagementPluginSetup } from '../../../src/plugins/data_source_management/public';
 import { DataSourcePluginSetup } from '../../../src/plugins/data_source/public';
 import { NavigationPublicPluginStart } from '../../../src/plugins/navigation/public';
-import { getDiscoverAction } from './utils/discoverAction';
-import { DataExplorerPluginSetup } from '../../../src/plugins/data_explorer/public';
+import { AssistantSetup } from '../../../plugins/dashboards-assistant/public';
 
 declare module '../../../src/plugins/ui_actions/public' {
   export interface ActionContextMapping {
     [ACTION_AD]: {};
+    [ACTION_SUGGEST_AD]: {}
   }
 }
 
@@ -70,7 +70,8 @@ export interface AnomalyDetectionSetupDeps {
   visAugmenter: VisAugmenterSetup;
   dataSourceManagement: DataSourceManagementPluginSetup;
   dataSource: DataSourcePluginSetup;
-  dataExplorer: DataExplorerPluginSetup;
+  data: DataPublicPluginSetup;
+  assistant: AssistantSetup;
 }
 
 export interface AnomalyDetectionStartDeps {
@@ -192,9 +193,8 @@ export class AnomalyDetectionOpenSearchDashboardsPlugin
       plugins.uiActions.addTriggerAction(CONTEXT_MENU_TRIGGER, action);
     });
 
-    // Add action to Discover
-    const discoverAction = getDiscoverAction();
-    plugins.dataExplorer.registerDiscoverAction(discoverAction);
+    const suggestAnomalyDetectorAction = getSuggestAnomalyDetectorAction();
+    plugins.uiActions.addTriggerAction(plugins.assistant.AI_ASSISTANT_TRIGGER, suggestAnomalyDetectorAction);
 
     // registers the expression function used to render anomalies on an Augmented Visualization
     plugins.expressions.registerFunction(overlayAnomaliesFunction);

@@ -5,7 +5,7 @@
 
 import React from 'react'
 import { ANOMALY_DETECTION_ICON } from "./constants";
-import GenerateAnomalyDetector from "../components/DiscoverAction/SuggestAnomalyDetector";
+import SuggestAnomalyDetector from "../components/DiscoverAction/SuggestAnomalyDetector";
 import { getClient, getOverlays } from '../../public/services';
 import { toMountPoint } from "../../../../src/plugins/opensearch_dashboards_react/public";
 import { Provider } from "react-redux";
@@ -20,7 +20,7 @@ export const getDiscoverAction = (): DiscoverAction => {
         const overlay = openFlyout(
             toMountPoint(
                 <Provider store={store}>
-                    <GenerateAnomalyDetector
+                    <SuggestAnomalyDetector
                         closeFlyout={() => overlay.close()}
                         context={context}
                     />
