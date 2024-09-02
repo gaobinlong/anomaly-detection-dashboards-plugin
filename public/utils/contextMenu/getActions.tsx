@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import configureStore from '../../redux/configureStore';
 import DocumentationTitle from '../../components/FeatureAnywhereContextMenu/DocumentationTitle/containers/DocumentationTitle';
 import { AD_FEATURE_ANYWHERE_LINK, ANOMALY_DETECTION_ICON } from '../constants';
-import { getClient, getOverlays } from '../../../public/services';
+import { getClient, getOverlays, getQueryService } from '../../../public/services';
 import { FLYOUT_MODES } from '../../../public/components/FeatureAnywhereContextMenu/AnywhereParentFlyout/constants';
 import SuggestAnomalyDetector from '../../../public/components/DiscoverAction/SuggestAnomalyDetector';
 
@@ -117,7 +117,10 @@ export const getDiscoverAction = (): DiscoverAction => {
 };
 
 export const getSuggestAnomalyDetectorAction = () => {
-  const onClick = function () {
+  const onClick = async function () {
+    const state = await getQueryService().state$.toPromise();
+    console.log('state');
+    console.log(state);
     const overlayService = getOverlays();
     const openFlyout = overlayService.openFlyout;
     const store = configureStore(getClient());

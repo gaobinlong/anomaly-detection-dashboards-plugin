@@ -71,7 +71,6 @@ export interface AnomalyDetectionSetupDeps {
   dataSourceManagement: DataSourceManagementPluginSetup;
   dataSource: DataSourcePluginSetup;
   data: DataPublicPluginSetup;
-  assistant: AssistantSetup;
 }
 
 export interface AnomalyDetectionStartDeps {
@@ -194,7 +193,7 @@ export class AnomalyDetectionOpenSearchDashboardsPlugin
     });
 
     const suggestAnomalyDetectorAction = getSuggestAnomalyDetectorAction();
-    plugins.uiActions.addTriggerAction(plugins.assistant.AI_ASSISTANT_TRIGGER, suggestAnomalyDetectorAction);
+    plugins.uiActions.addTriggerAction(plugins.assistantDashboards.assistantTriggers.AI_ASSISTANT_TRIGGER, suggestAnomalyDetectorAction);
 
     // registers the expression function used to render anomalies on an Augmented Visualization
     plugins.expressions.registerFunction(overlayAnomaliesFunction);

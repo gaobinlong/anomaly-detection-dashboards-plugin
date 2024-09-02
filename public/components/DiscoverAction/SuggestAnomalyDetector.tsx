@@ -85,11 +85,13 @@ function SuggestAnomalyDetector({
     closeFlyout: any;
 }) {
     const query = getQueryService();
-    console.log(query.state$);
+
     const dispatch = useDispatch();
     const notifications = getNotifications();
-    const indexPatternId = query.state$.query.dataset.id;
-    const indexPatternName = query.state$.query.dataset.title;
+    query.state$.subscribe((state) => console.log(state));
+
+    const indexPatternId = undefined;
+    const indexPatternName = undefined;
     if (!indexPatternId || !indexPatternName) {
         notifications.toasts.addDanger(
             'Cannot extract index pattern from the context'
